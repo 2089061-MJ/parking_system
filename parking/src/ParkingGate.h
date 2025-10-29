@@ -6,19 +6,16 @@
 
 class ParkingGate {
 public:
-    ParkingGate(uint8_t servoPin, uint8_t trigPin, uint8_t echoPin);
+    ParkingGate(uint8_t servoPin);
     void begin();
     void update();
 
 private:
     void openGate();
     void closeGate();
-    float measureDistance();
 
     Servo gateServo;
     uint8_t SERVO_PIN;
-    uint8_t TRIG_PIN;
-    uint8_t ECHO_PIN;
     int state;  // 0 = closed, 1 = open
     String command;
 };
