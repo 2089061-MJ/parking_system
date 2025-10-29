@@ -6,17 +6,17 @@ ParkingGate::ParkingGate(uint8_t servoPin)
 
 void ParkingGate::begin() {
     gateServo.attach(SERVO_PIN);
-    gateServo.write(0);  // 초기 닫힘
-    command = "";
+    gateServo.write(0);  // 초기 서보모터 값 : 0
+    command = "";   // 초기값은 공백으로 설정
 }
 
 void ParkingGate::update() {
-    // 시리얼 명령 처리
+    // 시리얼 통신 기능
     if (Serial.available()) {
         char c = Serial.read();
 
         if (c == '\n' || c == '\r') {
-            command.trim();
+            command.trim(); // 문자열 좌우 공백 제거
             if (command.length() > 0) {
                 Serial.println("받은 데이터 : " + command);
 
@@ -42,10 +42,10 @@ void ParkingGate::update() {
 
 void ParkingGate::openGate() {
     gateServo.write(120);
-    state = 1;
+    state = 1;  // 서보모터 상태 1 = 문 열림
 }
 
 void ParkingGate::closeGate() {
     gateServo.write(0);
-    state = 0;
+    state = 0;  // 서보모터 상태 0 = 문 닫힘
 }
