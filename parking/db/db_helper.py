@@ -23,3 +23,18 @@ class DB:
                 cur.execute(sql)
                 count = cur.fetchone()
                 return count[0]
+            
+    # 차량 입차 및 출차 로그 INSERT
+    def insert_parking_log(self, action, rfid_tag):
+        sql = "INSERT INTO TB_PARKING_LOG (RFID_TAG, EVENT_TYPE, EVENT_TIME) VALUES (%s, %s, NOW())"
+        with self.connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute(sql, (action, rfid_tag))
+                count = cur.rowcount
+                if count == 1 :
+                    conn.commit()
+                else :
+                    conn.rollback()
+        return count == 1
+
+   

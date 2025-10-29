@@ -39,8 +39,32 @@ app = Flask(__name__)
 #     elif event_type == "CAR_OUT":
 #         cursor.execute("SELECT car_id FROM car_log WHERE status = 'IN' ORDER BY car_id ")
 
-if __name__ == '__main__':
+@app.route('/')
+def main():
+    return render_template('main.html')
+
+# main.html에서 보낸 요청 응답 함수
+@app.route("/gateCtrl", methods=['POST'])
+def fn_reqGateCtrl():
     db = DB(**DB_CONFIG)
-    count = db.test_query()
-    print(count)
+
+    data = request.get_json()
+    action = data.get("action")
+    if action == "open":
+        action = "in"
+    else:
+        action = "out"
+    # 여기서 rfid 가져오기
+
+    rfid_id = 'RFID123456'
+    result = db.insert_parking_log(action, rfid_id)
+
+    # json형태로 return
+    return jsonify({"result": result})
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
+
+
 
